@@ -1,0 +1,13 @@
+.env
+.dev.vars
+
+__pycache__/
+*.pyc
+
+.venv/
+
+*.mp4
+*.webm
+*.mkv
+
+secrets/
