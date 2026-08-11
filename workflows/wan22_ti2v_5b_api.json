@@ -1,0 +1,158 @@
+{
+  "37": {
+    "inputs": {
+      "unet_name": "wan2.2_ti2v_5B_fp16.safetensors",
+      "weight_dtype": "default"
+    },
+    "class_type": "UNETLoader",
+    "_meta": {
+      "title": "Load Wan2.2 TI2V 5B"
+    }
+  },
+
+  "38": {
+    "inputs": {
+      "clip_name": "umt5_xxl_fp8_e4m3fn_scaled.safetensors",
+      "type": "wan",
+      "device": "default"
+    },
+    "class_type": "CLIPLoader",
+    "_meta": {
+      "title": "Load Wan Text Encoder"
+    }
+  },
+
+  "39": {
+    "inputs": {
+      "vae_name": "wan2.2_vae.safetensors"
+    },
+    "class_type": "VAELoader",
+    "_meta": {
+      "title": "Load Wan2.2 VAE"
+    }
+  },
+
+  "48": {
+    "inputs": {
+      "shift": 8,
+      "model": [
+        "37",
+        0
+      ]
+    },
+    "class_type": "ModelSamplingSD3",
+    "_meta": {
+      "title": "Model Sampling SD3"
+    }
+  },
+
+  "6": {
+    "inputs": {
+      "text": "Photorealistic cinematic video of a modern sports car driving through a rainy city at night, realistic lighting, natural motion, stable camera, physically accurate reflections.",
+      "clip": [
+        "38",
+        0
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "Positive Prompt"
+    }
+  },
+
+  "7": {
+    "inputs": {
+      "text": "cartoon, anime, CGI, illustration, low quality, blurry, distorted, deformed, warped geometry, flickering, jitter, morphing, unstable background, unnatural motion, watermark, subtitles",
+      "clip": [
+        "38",
+        0
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "Negative Prompt"
+    }
+  },
+
+  "55": {
+    "inputs": {
+      "width": 1280,
+      "height": 704,
+      "length": 41,
+      "batch_size": 1,
+      "vae": [
+        "39",
+        0
+      ]
+    },
+    "class_type": "Wan22ImageToVideoLatent",
+    "_meta": {
+      "title": "Wan2.2 Text To Video Latent"
+    }
+  },
+
+  "3": {
+    "inputs": {
+      "seed": 42,
+      "steps": 30,
+      "cfg": 5,
+      "sampler_name": "uni_pc",
+      "scheduler": "simple",
+      "denoise": 1,
+      "model": [
+        "48",
+        0
+      ],
+      "positive": [
+        "6",
+        0
+      ],
+      "negative": [
+        "7",
+        0
+      ],
+      "latent_image": [
+        "55",
+        0
+      ]
+    },
+    "class_type": "KSampler",
+    "_meta": {
+      "title": "KSampler"
+    }
+  },
+
+  "8": {
+    "inputs": {
+      "samples": [
+        "3",
+        0
+      ],
+      "vae": [
+        "39",
+        0
+      ]
+    },
+    "class_type": "VAEDecode",
+    "_meta": {
+      "title": "VAE Decode"
+    }
+  },
+
+  "47": {
+    "inputs": {
+      "filename_prefix": "wan22_video",
+      "codec": "vp9",
+      "fps": 24,
+      "crf": 16.1,
+      "images": [
+        "8",
+        0
+      ]
+    },
+    "class_type": "SaveWEBM",
+    "_meta": {
+      "title": "Save Video"
+    }
+  }
+}
