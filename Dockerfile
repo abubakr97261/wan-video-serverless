@@ -1,22 +1,11 @@
-FROM runpod/worker-comfyui:5.8.7-base
+FROM runpod/worker-comfyui:5.8.6-base
 
 
 # ==========================================================
 # VIDEO WORKER DEPENDENCIES
 # ==========================================================
 
-COPY requirements.txt /tmp/video-requirements.txt
-
-RUN uv pip install \
-    -r /tmp/video-requirements.txt
-
-
-# ==========================================================
-# NETWORK-VOLUME MODEL CONFIGURATION
-# ==========================================================
-
-COPY extra_model_paths.yaml \
-    /comfyui/extra_model_paths.yaml
+RUN uv pip install "boto3>=1.34,<2"
 
 
 # ==========================================================
@@ -31,6 +20,9 @@ COPY workflows/wan_video_api.json \
 
 # ==========================================================
 # CUSTOM RUNPOD HANDLER
+#
+# The base worker's /start.sh starts ComfyUI and /handler.py.
+# We replace the standard image handler with our video handler.
 # ==========================================================
 
 COPY handler.py \
