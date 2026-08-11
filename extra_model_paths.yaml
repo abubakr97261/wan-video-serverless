@@ -1,4 +1,4 @@
-runpod_wan_models:
+runpod_network_volume:
   base_path: /runpod-volume/models
 
   diffusion_models: diffusion_models

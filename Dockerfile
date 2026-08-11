@@ -9,6 +9,17 @@ RUN uv pip install "boto3>=1.34,<2"
 
 
 # ==========================================================
+# NETWORK VOLUME MODEL PATHS
+#
+# Tell ComfyUI explicitly that our models live on the
+# attached RunPod network volume.
+# ==========================================================
+
+COPY extra_model_paths.yaml \
+    /comfyui/extra_model_paths.yaml
+
+
+# ==========================================================
 # WORKFLOW
 # ==========================================================
 
@@ -19,10 +30,7 @@ COPY workflows/wan_video_api.json \
 
 
 # ==========================================================
-# CUSTOM RUNPOD HANDLER
-#
-# The base worker's /start.sh starts ComfyUI and /handler.py.
-# We replace the standard image handler with our video handler.
+# CUSTOM VIDEO HANDLER
 # ==========================================================
 
 COPY handler.py \
